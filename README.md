@@ -1,2 +1,3 @@
-# CCSakura
+# CCSSakura
+Control Character Scanner Sakura
 
