@@ -13,15 +13,18 @@ var (
 	fileName = flag.String("f", "", "file name")
 )
 
-func ccs(s string) bool {
+func ccs(s string) (int, bool) {
 	for i := 1; i < 32; i++ {
 		var cc = []byte{byte(i)}
 		if strings.Contains(s, string(cc)) {
-			return true
+			return i, true
 		}
 	}
 
-	return strings.Contains(s, string(0x7f))
+	if strings.Contains(s, string(0x7f)) {
+		return 0x7f, true
+	}
+	return -1, false
 }
 
 func main() {
@@ -35,8 +38,8 @@ func main() {
 	scanner := bufio.NewScanner(f)
 	ln := 0
 	for scanner.Scan() {
-		if ccs(scanner.Text()) {
-			fmt.Println(ln + 1)
+		if cCode, result := ccs(scanner.Text()); result {
+			fmt.Printf("line: %d, char code: %d\n", ln+1, cCode)
 		}
 		ln++
 	}
